@@ -11,6 +11,11 @@
     }else{
         $captchaCorrecto = FALSE;
     }
+    // Inicializo variables
+    $userRedmine = "";
+    $passRedmine = "";
+    $apiRedmine = "";
+    $projectId = "";
 
     //////////////////////////////
     // Funciones
@@ -31,227 +36,63 @@
          return $ip;  
     }  
     
-    function asignarIncidenciaA($rol, $motivo, $ciclo){
-              
-        if($motivo == "1"){//"Plataforma caída";
-            return $GLOBALS["idUserAdmin"];
+    function asignarIncidenciaA($ambito){
+        //
+        $userRedmine = $GLOBALS["userRedmineComun"];
+        $passRedmine = $GLOBALS["passRedmineComun"];
+        $apiRedmine = $GLOBALS["apiRedmineComun"];
+        $projectId = "9"; //CATEDU
+        //
+        switch ($ambito) {
+            case "Aeducar":
+                $projectId = "10";
+                return $GLOBALS["idUserAeducar"];
+                break;
+            case "Aramoodle":
+                return $GLOBALS["idUserAramoodle"];
+                break;
+            case "Aularagón":
+                return $GLOBALS["idUserAularagon"];
+                break;
+            case "Competencias digitales":
+                $projectId = "13";
+                return $GLOBALS["idUserCDD"];
+                break;
+            case "Doceo":
+                return $GLOBALS["idUserDoceo"];
+                break;
+            case "FP Distancia":
+                $projectId = "12";
+                return $GLOBALS["idUserFP"];
+                break;
+            case "STEAM":
+                return $GLOBALS["idUserSTEAM"];
+                break;
+            case "Vitalinux":
+                $userRedmine = $GLOBALS["userRedmineVx"];
+                $passRedmine = $GLOBALS["passRedmineVx"];
+                $apiRedmine = $GLOBALS["apiRedmineVx"];
+                $projectId = "2";
+                return $GLOBALS["idUserVitalinux"];
+                break;
+            case "WordPress":
+                return $GLOBALS["idUserWordPress"];
+                break;
         }
-        // 2-"Acceso a plataforma. Problemas con el usuario y contraseña";
-        // 3-"Acceso a los contenidos o módulos";
-        elseif($motivo == "2" || $motivo == "3" ){
-            switch ($ciclo) {
-                case "CPIFP Bajo Aragón: Desarrollo de Aplicaciones Multiplataforma":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Bajo_Aragon_DAM"];
-                    break;
-                case "CPIFP Corona de Aragón: Administración y Finanzas":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Corona_de_Aragon_ADFI"];
-                    break;
-                case "CPIFP Corona de Aragón: Laboratorio de Análisis y de Control de Calidad":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Corona_de_Aragon_LACC"];
-                    break;
-                case "CPIFP Corona de Aragón: Asistencia a la dirección":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Corona_de_Aragon_AD"];
-                    break;
-                case "CPIFP Los Enlaces: Comercio Internacional":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_CI"];
-                    break;
-                case "CPIFP Los Enlaces: Desarrollo de Aplicaciones Web":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_DAW"];
-                    break;
-                case "CPIFP Los Enlaces: Sistemas Microinformáticos":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_SMR"];
-                    break;
-                case "CPIFP Los Enlaces: Transporte y Logística":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_TL"];
-                    break;
-                case "CPIFP Los Enlaces: Actividades Comerciales":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_AC"];
-                    break;
-                case "CPIFP Los Enlaces: Gestión de ventas y espacios comerciales":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_GVEC"];
-                    break;
-                case "CPIFP Los Enlaces: Producción de audiovisuales y espectáculos":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Los_Enlaces_PAE"];
-                    break;
-                case "CPIFP Montearagón: Atención a Personas en Situación de Dependencia":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Montearagon_APSD"];
-                    break;
-                case "CPIFP Pirámide: Instalaciones Eléctricas y Automáticas":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_Piramide_IAE"];
-                    break;
-                case "IES Avempace: Educación Infantil":
-                    return $GLOBALS["idUserCoordinacion_IES_Avempace_EI"];
-                    break;
-                case "IES Luis Buñuel: Atención a Personas en Situación de Dependencia":
-                    return $GLOBALS["idUserCoordinacion_IES_Luis_Bunuel_APSD"];
-                    break;
-                case "IES María Moliner: Integración social":
-                    return $GLOBALS["idUserCoordinacion_IES_Maria_Moliner_IS"];
-                    break;
-                case "IES Martínez Vargas: Educación Infantil":
-                    return $GLOBALS["idUserCoordinacion_IES_Martinez_Vargas_EI"];
-                    break;
-                case "IES Miralbueno: Agencias de viajes y gestión de eventos":
-                    return $GLOBALS["idUserCoordinacion_IES_Miralbueno_AVGE"];
-                    break;
-                case "IES Pablo Serrano: Administración de Sistemas Informáticos en Red":
-                    return $GLOBALS["idUserCoordinacion_IES_Pablo_Serrano_ASIR"];
-                    break;
-                case "IES Río Gállego: Farmacia y Parafarmacia":
-                    return $GLOBALS["idUserCoordinacion_IES_Rio_Gallego_FP"];
-                    break;
-                case "IES Río Gállego: Emergencias Sanitarias":
-                    return $GLOBALS["idUserCoordinacion_IES_Rio_Gallego_ES"];
-                    break;
-                case "IES Río Gállego: Sistemas de Telecomunicaciones e Informáticos":
-                    return $GLOBALS["idUserCoordinacion_IES_Rio_Gallego_STI"];
-                    break;
-                case "CPIFP San Blas: Educación y Control Ambiental":
-                    return $GLOBALS["idUserCoordinacion_CPIFP_San_Blas_ECA"];
-                    break;
-                case "IES Santa Emerenciana: Gestión Administrativa":
-                    return $GLOBALS["idUserCoordinacion_IES_Santa_Emerenciana_GA"];
-                    break;
-                case "IES Sierra de Guara: Gestión Administrativa":
-                    return $GLOBALS["idUserCoordinacion_IES_Sierra_de_Guara_GA"];
-                    break;
-                case "IES Tiempos Modernos: Gestión Administrativa":
-                    return $GLOBALS["idUserCoordinacion_IES_Tiempos_Modernos_GA"];
-                    break;
-                case "IES Vega del Turia: Emergencias sanitarias":
-                    return $GLOBALS["idUserCoordinacion_IES_Vega_del_Turia_ES"];
-                    break;
-            }
-        }
-        // 4-"Dar de alta/baja profesorado";
-        // 5-"Otros";
-        elseif($motivo == "4" || $motivo == "5" || $motivo == "6" ){//
-            return $GLOBALS["idUserFP"];
-        }
-        //Por defecto lo envío a FP y que ellos decidan
-        return $GLOBALS["idUserFP"];
-    }
-
-    function procesaRol($rol){
-        switch ($rol) {
-            case "e":
-                return "Estudiante";
-                break;
-            case "p":
-                return "Profesorado";
-                break;
-            case "c":
-                return "Coordinadores/as";
-                break;
-            case "o":
-                return "Otros";
-                break;
-            default:
-                return "ERROR";
-        }
-    }
-
-    function procesaMotivo($motivo){
-        switch ($motivo) {
-            case "1":
-                return "Plataforma caída";
-                break;
-            case "2":
-                return "Acceso a plataforma. Problemas con el usuario y contraseña";
-                break;
-            case "3":
-                return "Acceso a los contenidos o módulos";
-                break;
-            case "4":
-                return "Dar de alta/baja profesorado";
-                break;
-            case "5":
-                return "Otros";
-                break;
-            case "6":
-                return "Cambio/Actualización de materiales";
-                break;
-            default:
-                return "ERROR";
-        }
-    }
-
-    function procesaPrioridad($motivo){
-        switch ($motivo) {
-            case "1": //Plataforma caída
-                return "2";
-                break;
-            case "2"://Acceso a plataforma. Problemas con el usuario y contraseña
-                return "2";
-                break;
-            case "3"://Acceso a los contenidos o módulos
-                return "2";
-                break;
-            case "4"://Dar de alta/baja profesorado
-                return "3";
-                break;
-            case "5"://Otros
-                return "2";
-                break;
-            case "6"://Cambio/Actualización de materiales
-                return "2";
-                break;
-            default:
-                return "ERROR";
-        }
+        return ["idUserOtros"];
     }
     //////////////////////////////
     // Recojo parámetros del form
     //////////////////////////////
-    $rol = htmlspecialchars($_POST["rol"]);
+    $ambito = htmlspecialchars($_POST["ambito"]);
     $nombre_solicitante = htmlspecialchars($_POST["nombre_solicitante"]);
     $pape_solicitante = htmlspecialchars($_POST["pape_solicitante"]);
     $sape_solicitante = htmlspecialchars($_POST["sape_solicitante"]);
     $email_solicitante = htmlspecialchars($_POST["email_solicitante"]);
-    $ciclo = htmlspecialchars($_POST["ciclo"]);
-    $motivo = htmlspecialchars($_POST["motivo"]);
-    // docente a crear
-    $cod_coordinacion = htmlspecialchars($_POST["cod_coordinacion"]);
-    $tipo_modificacion = htmlspecialchars($_POST["tipo_modificacion"]);
-    $nombre_docente = htmlspecialchars($_POST["nombre_docente"]);
-    $pape_docente = htmlspecialchars($_POST["pape_docente"]);
-    $sape_docente = htmlspecialchars($_POST["sape_docente"]);
-    $dni_docente = htmlspecialchars($_POST["dni_docente"]);
-    $email_docente = htmlspecialchars($_POST["email_docente"]);
-    $modulo1_docente = htmlspecialchars($_POST["modulo1_docente"]);
-    $modulo2_docente = htmlspecialchars($_POST["modulo2_docente"]);
-    $modulo3_docente = htmlspecialchars($_POST["modulo3_docente"]);
-    //correcciones materiales
-    $modulo_afectado = htmlspecialchars($_POST["modulo_afectado"]);
-    $explicacion_modulo_afectado = htmlspecialchars($_POST["explicacion_modulo_afectado"]);
-    $otros_modulo_afectado = htmlspecialchars($_POST["otros_modulo_afectado"]);
-    //
-    $otros = htmlspecialchars($_POST["otros"]);
     //
     $captcha = htmlspecialchars($_POST["captcha"]);
     $token = htmlspecialchars($_POST["token"]);
     $adjunto = htmlspecialchars($_POST["adjunto"]);
-    // Compruebo que el captcha es correcto
-    /*echo("captcha: ". $captcha);
-    echo("en sesion: ". $_SESSION["captcha"]);
-    if($captcha != ""){
-        if($captcha != $_SESSION["captcha"]){
-            echo("<br>captcha incorrecto");
-            //header("Location: ../index.php?error=captcha");
-            //exit();
-        }
-    }*/
-
-    //////////////////////////////
-    // Si se quiere crear/borrar un nuevo docente hay que comprobar si se tiene el permiso
-    //////////////////////////////
-    $accesoPermitido = true;
-
-    if ($rol == "c" && $motivo == "4") {
-        if($cod_coordinacion != $codeCoordinacionPrivate){
-            $accesoPermitido = false;
-        }
-    }
 
     //////////////////////////////
     // Antes de procesar miro si campos obligatorios están rellenos para evitar envío masivo de navegadores que se saltan required
