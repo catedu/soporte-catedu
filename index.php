@@ -33,7 +33,7 @@ $sessionid = session_id();
                             
                             <div class="mb-3">
                             <label for="ambito" class="form-label">(*) Ámbito</label>
-                                <select id="ambito" class="form-select" required >
+                                <select id="ambito" name="ambito" class="form-select" required >
                                     <option value="">Elija una opción</option>
                                     <option value="Aeducar">Aeducar</option>
                                     <option value="Aramoodle">Aramoodle</option>
@@ -50,22 +50,22 @@ $sessionid = session_id();
 
                            <div class="mb-3">
                                 <label for="nombre_solicitante" class="form-label">(*) Su nombre</label>
-                                <input type="text" class="form-control" id="nombre_solicitante" required >
+                                <input type="text" class="form-control" id="nombre_solicitante" name="nombre_solicitante" required >
                             </div>
 
                             <div class="mb-3">
                                 <label for="pape_solicitante" class="form-label">(*) Su 1er apellido</label>
-                                <input type="text" class="form-control" id="pape_solicitante" required >
+                                <input type="text" class="form-control" id="pape_solicitante" name="pape_solicitante" required >
                             </div>
 
                             <div class="mb-3">
                                 <label for="sape_solicitante" class="form-label">Su 2º apellido</label>
-                                <input type="text" class="form-control" id="sape_solicitante" >
+                                <input type="text" class="form-control" id="sape_solicitante" name="sape_solicitante" >
                             </div>
 
                             <div class="mb-3">
                                 <label for="email_solicitante" class="form-label">(*) Su email</label>
-                                <input type="email" class="form-control" id="email_solicitante" required >
+                                <input type="email" class="form-control" id="email_solicitante" name="email_solicitante" required >
                             </div>
 
                             <div class="mb-3">

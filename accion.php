@@ -15,6 +15,7 @@
     $userRedmine = "";
     $passRedmine = "";
     $apiRedmine = "";
+    $urlRedmine = "";
     $projectId = "";
 
     //////////////////////////////
@@ -35,12 +36,22 @@
          }  
          return $ip;  
     }  
-    
+    /**
+     * Asigna la incidencia a quién corresponda en función del ámbito
+     * PERO también asigna
+     * - usuario de redmine
+     * - pass de redmine
+     * - API de redmine
+     * - url de redmine
+     * - projectid
+     * En función del ámbito
+     */
     function asignarIncidenciaA($ambito){
         //
         $userRedmine = $GLOBALS["userRedmineComun"];
         $passRedmine = $GLOBALS["passRedmineComun"];
         $apiRedmine = $GLOBALS["apiRedmineComun"];
+        $urlRedmine = $GLOBALS["urlRedmine"];
         $projectId = "9"; //CATEDU
         //
         switch ($ambito) {
@@ -72,6 +83,7 @@
                 $userRedmine = $GLOBALS["userRedmineVx"];
                 $passRedmine = $GLOBALS["passRedmineVx"];
                 $apiRedmine = $GLOBALS["apiRedmineVx"];
+                $urlRedmine = $GLOBALS["urlRedmineVx"];
                 $projectId = "2";
                 return $GLOBALS["idUserVitalinux"];
                 break;
@@ -89,6 +101,7 @@
     $pape_solicitante = htmlspecialchars($_POST["pape_solicitante"]);
     $sape_solicitante = htmlspecialchars($_POST["sape_solicitante"]);
     $email_solicitante = htmlspecialchars($_POST["email_solicitante"]);
+    $otros = htmlspecialchars($_POST["otros"]);
     //
     $captcha = htmlspecialchars($_POST["captcha"]);
     $token = htmlspecialchars($_POST["token"]);
@@ -105,37 +118,20 @@
 
 
 
-    if($accesoPermitido && $camposObligatoriosRellenos && $captchaCorrecto){
+    if( $camposObligatoriosRellenos && $captchaCorrecto ){
         //////////////////////////////
         // Creo variables iniciales
         //////////////////////////////
         $date = date('d-m-Y H:i:s');
         $ip = getIPAddress();  
 
-        $descriptionRedmine = '*' . $nombre_solicitante . '* *' . $pape_solicitante . '* ha enviado el ' . $date . ' desde la IP ' . $ip . ' una incidencia con la siguiente información:\n';
+        $descriptionRedmine = '*' . $nombre_solicitante . ' ' . $pape_solicitante . '* ha enviado el ' . $date . ' desde la IP ' . $ip . ' una incidencia con la siguiente información:\n';
         $descriptionRedmine .= '\n';
-        $descriptionRedmine .= '- *Rol* : ' . procesaRol($rol) . '\n';
+        $descriptionRedmine .= '- *Ámbito* : ' .$ambito . '\n';
         $descriptionRedmine .= '- *Nombre solicitante* : ' . $nombre_solicitante . '\n';
         $descriptionRedmine .= '- *1er apellido solicitante* : ' . $pape_solicitante . '\n';
         $descriptionRedmine .= '- *2º apellido solicitante* : ' . $sape_solicitante . '\n';
         $descriptionRedmine .= '- *E-mail solicitante* : ' . $email_solicitante . '\n';
-        $descriptionRedmine .= '- *Ciclo* : ' . $ciclo . '\n';
-        $descriptionRedmine .= '- *Motivo/Problema* : ' . procesaMotivo($motivo) . '\n';
-        if ($motivo == "6") {
-            $descriptionRedmine .= '- *Módulo profesional afectado* : ' . $modulo_afectado . '\n';
-            $descriptionRedmine .= '- *Explicación detallada del cambio, actualización o error detectado* (Incluye la información de manera que pueda ser fácilmente identificable: URL, número de unidad del módulo, párrafo concreto, etc.): ' . $explicacion_modulo_afectado . '\n';
-            $descriptionRedmine .= '- *Otros comentarios* (Por ejemplo, puedes comentar cuál crees que sería la solución a ese error, etc.): ' . $otros_modulo_afectado . '\n';
-        }else if ($rol == "c" && $motivo == "4") {
-            $descriptionRedmine .= '- *Tipo de modificación* : ' . $tipo_modificacion . '\n';
-            $descriptionRedmine .= '- *Nombre de docente a modificar* : ' . $nombre_docente . '\n';
-            $descriptionRedmine .= '- *1er apellido de docente a modificar* : ' . $pape_docente . '\n';
-            $descriptionRedmine .= '- *2º apellido de docente a modificar* : ' . $sape_docente . '\n';
-            $descriptionRedmine .= '- *DNI\nIE de docente a modificar* : ' . $dni_docente . '\n';
-            $descriptionRedmine .= '- *E-mail de docente a modificar* : ' . $email_docente . '\n';
-            $descriptionRedmine .= '- *Módulo 1* : ' . $modulo1_docente . '\n';
-            $descriptionRedmine .= '- *Módulo 2* : ' . $modulo2_docente . '\n';
-            $descriptionRedmine .= '- *Módulo 3* : ' . $modulo3_docente . '\n';
-        }
         $descriptionRedmine .= '- *Explicación de la situación* : ' . $otros . '\n';
         //$descriptionRedmine .= '- *captcha en form* : ' . $captcha . '\n';
         //$descriptionRedmine .= '- *captcha en sesion* : ' . $_SESSION["captcha"] . '\n';
@@ -143,7 +139,7 @@
         //////////////////////////////
         // Contacto con RedMine para crear la incidencia
         //////////////////////////////
-        $url = "https://soportearagon.catedu.es/issues.json";
+        $url = $urlRedmine;
         $asignarA = asignarIncidenciaA($rol, $motivo, $ciclo);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
@@ -167,7 +163,7 @@
         }
 
         $issue .= '<description><![CDATA['.$descriptionRedmine.']]></description>
-        <priority_id>'.procesaPrioridad($motivo).'</priority_id>
+        <priority_id>2</priority_id>
         <custom_fields type="array">
             <custom_field id="1" name="owner-email">
                 <value>'.$email_solicitante.'</value>
@@ -215,28 +211,11 @@
             $cuerpo = 'Hola ' . $nombre_solicitante . ',<br/>';
             $cuerpo .= 'su incidencia realizada el ' . $date . ' ha sido recogida en nuestro sistema con el id <strong>'. $incidenciaCreadaId .'</strong>. La misma contiene la siguiente información:<br/>';
             $cuerpo .= '<ul>';
-            $cuerpo .= '<li><b>Rol</b>: ' . procesaRol($rol) . '</li>';
+            $cuerpo .= '<li><b>Ámbito</b>: ' . $ambito . '</li>';
             $cuerpo .= '<li><b>Nombre solicitante</b>: ' . $nombre_solicitante . '</li>';
             $cuerpo .= '<li><b>1er apellido solicitante</b>: ' . $pape_solicitante . '</li>';
             $cuerpo .= '<li><b>2º apellido solicitante</b>: ' . $sape_solicitante . '</li>';
             $cuerpo .= '<li><b>E-mail solicitante</b>: ' . $email_solicitante . '</li>';
-            $cuerpo .= '<li><b>Ciclo</b>: ' . $ciclo . '</li>';
-            $cuerpo .= '<li><b>Motivo/Problema</b>: ' . procesaMotivo($motivo) . '</li>';
-            if($motivo == "6"){
-                $cuerpo .= '<li><b>Módulo profesional afectado</b>: ' . $modulo_afectado . '</li>';
-                $cuerpo .= '<li><b>Explicación detallada del cambio, actualización o error detectado</b>: ' . $explicacion_modulo_afectado . '</li>';
-                $cuerpo .= '<li><b>Otros comentarios</b>: ' . $otros_modulo_afectado . '</li>';
-            }else if ($rol == "c" && $motivo == "4") {
-                $cuerpo .= '<li><b>Tipo de modificación</b>: ' . $tipo_modificacion . '</li>';
-                $cuerpo .= '<li><b>Nombre de docente a modificar</b>: ' . $nombre_docente . '</li>';
-                $cuerpo .= '<li><b>1er apellido de docente a modificar</b>: ' . $pape_docente . '</li>';
-                $cuerpo .= '<li><b>2º apellido de docente a modificar</b>: ' . $sape_docente . '</li>';
-                $cuerpo .= '<li><b>DNI/NIE de docente a modificar</b>: ' . $dni_docente . '</li>';
-                $cuerpo .= '<li><b>E-mail de docente a modificar</b>: ' . $email_docente . '</li>';
-                $cuerpo .= '<li><b>Módulo 1</b>: ' . $modulo1_docente . '</li>';
-                $cuerpo .= '<li><b>Módulo 2</b>: ' . $modulo2_docente . '</li>';
-                $cuerpo .= '<li><b>Módulo 3</b>: ' . $modulo3_docente . '</li>';
-            }
             $cuerpo .= '<li><b>Explicación de la situación</b>: ' . $otros . '</li>';
             $cuerpo .= '</ul>';
             $cuerpo .= 'No conteste a este correo electrónico puesto que se trata de una cuenta desatendida y automatizada<br/>';
@@ -269,21 +248,6 @@
         <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
         <link rel="stylesheet" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/theme/moove/style/aragon/aragon-wrapper.css" type="text/css">
         
-        <!-- Matomo -->
-        <script type="text/javascript">
-        var _paq = window._paq = window._paq || [];
-        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function() {
-            var u="https://analytics.catedu.es/";
-            _paq.push(['setTrackerUrl', u+'matomo.php']);
-            _paq.push(['setSiteId', '1']);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-        })();
-        </script>
-        <!-- End Matomo Code -->
     </head>
     <body  id="page-site-index" class="format-site course path-site chrome dir-ltr lang-es yui-skin-sam yui3-skin-sam test-adistanciafparagon-es pagelayout-frontpage course-1 context-2 notloggedin ">
         <section  class="ita-sectionguia aragob_header_wrapper">
@@ -318,9 +282,7 @@
     // comprobaciones para informar a los usuarios del éxito/fallo de su comunicación
     //////////////////////////////
     $h3 = '';
-    if( !$accesoPermitido ){
-        $h3 = 'Acceso no permitido a coordinación. Solicite la clave al departamento';
-    }elseif(!$camposObligatoriosRellenos){
+    if(!$camposObligatoriosRellenos){
         $h3 =  'Debe rellenar todos los campos obligatorios. Incidencia NO procesada.';
     }elseif(!$captchaCorrecto){
         $h3 =  'El código de captcha no es correcto. Incidencia NO procesada.';
@@ -340,34 +302,11 @@
 ?>
                                             <p>La información recogida es la siguiente:</p>
                                             <ul>
-                                                <li>Rol</b>: <?php echo procesaRol($rol); ?></li>
+                                                <li>Ámbito</b>: <?php echo htmlentities($ambito, ENT_QUOTES, "UTF-8"); ?></li>
                                                 <li>Nombre solicitante</b>: <?php echo htmlentities($nombre_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
                                                 <li>1er apellido solicitante</b>: <?php echo htmlentities($pape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
                                                 <li>2º apellido solicitante</b>: <?php echo htmlentities($sape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
                                                 <li>E-mail solicitante</b>: <?php echo htmlentities($email_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Ciclo</b>: <?php echo htmlentities($ciclo, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Motivo/Problema</b>: <?php echo procesaMotivo($motivo); ?></li>
-<?php
-        if ($motivo == "6"){
-?>
-                                                <li>Módulo profesional afectado</b>: <?php echo procesaMotivo($motivo); ?></li>
-                                                <li>Explicación detallada del cambio, actualización o error detectado</b>: <?php echo procesaMotivo($motivo); ?></li>
-                                                <li>Otros comentarios</b>: <?php echo procesaMotivo($motivo); ?></li>
-<?php
-        }else if ($rol == "c" && $motivo == "4") {
-?>
-                                                <li>Tipo de modificación</b>: <?php echo htmlentities($tipo_modificacion, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Nombre de docente a modificar</b>: <?php echo htmlentities($nombre_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>1er apellido de docente a modificar</b>: <?php echo htmlentities($pape_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>2º apellido de docente a modificar</b>: <?php echo htmlentities($sape_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>DNI/NIE de docente a modificar</b>: <?php echo htmlentities($dni_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>E-mail de docente a modificar </b>: <?php echo htmlentities($email_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Módulo 1</b>: <?php echo htmlentities($modulo1_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Módulo 2</b>: <?php echo htmlentities($modulo2_docente, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Módulo 3</b>: <?php echo htmlentities($modulo3_docente, ENT_QUOTES, "UTF-8"); ?></li>
-<?php
-        }
-?>
                                                 <li>Explicación de la situación</b>: <?php echo htmlentities($otros, ENT_QUOTES, "UTF-8"); ?></li>
                                             </ul>
 <?php
