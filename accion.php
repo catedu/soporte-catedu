@@ -142,11 +142,8 @@
         // Contacto con RedMine para crear la incidencia
         //////////////////////////////
         $url = $GLOBALS["urlRedmineComun"];
-        echo 'url: ' . $url . '<br/><br/>';
+        
         $asignarA = asignarIncidenciaA($ambito);
-        echo 'url: ' . $url . '<br/><br/>';
-        echo 'projectId: ' . $projectId . '<br/><br/>';
-        echo 'asignarA: ' . $asignarA . '<br/><br/>';
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
         curl_setopt($curl, CURLOPT_POST, 1);
@@ -177,13 +174,11 @@
         </custom_fields>
         <assigned_to_id>'. $asignarA .'</assigned_to_id>
         </issue>';
-        echo 'issue: ' . $issue . '<br/><br/>';
+        
         curl_setopt($curl, CURLOPT_POSTFIELDS, $issue );
         // Optional Authentication:
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         
-        echo 'userRedmine: ' . $userRedmine . '<br/><br/>';
-        echo 'passRedmine: ' . $passRedmine . '<br/><br/>';
         curl_setopt($curl, CURLOPT_USERPWD, $userRedmine.":".$passRedmine);
 
         curl_setopt($curl, CURLOPT_URL, $url);
