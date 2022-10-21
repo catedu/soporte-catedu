@@ -86,7 +86,7 @@ $sessionid = session_id();
 
                             <div class="mb-3">
                                 <label for="captcha_challenge" class="form-label">(*) Captcha</label>
-                                <input type="text" class="form-control" id="captcha_challenge" pattern="[A-Z]{6}" required >
+                                <input type="text" class="form-control" id="captcha_challenge" name="captcha_challenge" pattern="[A-Z]{6}" required >
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Enviar</button>
