@@ -47,13 +47,15 @@
      * En función del ámbito
      */
     function asignarIncidenciaA($ambito){
-        //
+        // Le indico a la función que estas variables son las de fuera
+        global $userRedmine, $passRedmine, $apiRedmine, $urlRedmine, $projectId;
+        // Asigno lo común
         $userRedmine = $GLOBALS["userRedmineComun"];
         $passRedmine = $GLOBALS["passRedmineComun"];
         $apiRedmine = $GLOBALS["apiRedmineComun"];
-        $urlRedmine = $GLOBALS["urlRedmine"];
+        $urlRedmine = $GLOBALS["urlRedmineComun"];
         $projectId = "9"; //CATEDU
-        //
+        // Personalizo en función de cada caso
         switch ($ambito) {
             case "Aeducar":
                 $projectId = "10";
@@ -139,8 +141,12 @@
         //////////////////////////////
         // Contacto con RedMine para crear la incidencia
         //////////////////////////////
-        $url = $urlRedmine;
-        $asignarA = asignarIncidenciaA($rol, $motivo, $ciclo);
+        $url = $GLOBALS["urlRedmineComun"];
+        echo 'url: ' . $url . '<br/><br/>';
+        $asignarA = asignarIncidenciaA($ambito);
+        echo 'url: ' . $url . '<br/><br/>';
+        echo 'projectId: ' . $projectId . '<br/><br/>';
+        echo 'asignarA: ' . $asignarA . '<br/><br/>';
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
         curl_setopt($curl, CURLOPT_POST, 1);
@@ -148,7 +154,7 @@
         <?xml version="1.0"?>
         <issue>
         <project_id>'.$projectId.'</project_id>
-        <subject>'.procesaMotivo($motivo).'</subject>';
+        <subject>'.$ambito.'</subject>';
 
         if($token != ""){
             $issue .= '
@@ -171,9 +177,13 @@
         </custom_fields>
         <assigned_to_id>'. $asignarA .'</assigned_to_id>
         </issue>';
+        echo 'issue: ' . $issue . '<br/><br/>';
         curl_setopt($curl, CURLOPT_POSTFIELDS, $issue );
         // Optional Authentication:
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        
+        echo 'userRedmine: ' . $userRedmine . '<br/><br/>';
+        echo 'passRedmine: ' . $passRedmine . '<br/><br/>';
         curl_setopt($curl, CURLOPT_USERPWD, $userRedmine.":".$passRedmine);
 
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -182,16 +192,17 @@
         $result = curl_exec($curl);
         curl_close($curl);
 
-        //echo 'resultado: ' . $result . '<br/><br/>';
+        echo 'resultado: ' . $result . '<br/><br/>';
         $respuesta = json_decode($result, true);
         $incidenciaCreada = $respuesta["issue"];
-        //echo '$incidenciaCreada: '. $incidenciaCreada;
+        echo '$incidenciaCreada: '. $incidenciaCreada;
         $incidenciaCreadaId = $incidenciaCreada["id"];
-        //echo '$incidenciaCreadaId: '. $incidenciaCreadaId;
+        echo '$incidenciaCreadaId: '. $incidenciaCreadaId;
 
         $exitoCreandoIncidencia = false;
         if (isset($incidenciaCreadaId) && $incidenciaCreadaId !== '') {
             $exitoCreandoIncidencia = true;
+            echo '$exitoCreandoIncidencia cambiado a true';
         }
 
         //////////////////////////////
@@ -263,7 +274,7 @@
                     <div id="page-navbar">
                         <nav>
                             <ol class="breadcrumb"><li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/" >Página Principal</a></li>
-                                <li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/soporte/" >Soporte</a></li>
+                                <li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/soporte-catedu/" >Soporte</a></li>
                             </ol>    
                         </nav>
                     </div>
