@@ -3,10 +3,10 @@
 // Renombrar a secret.php una vez puestos los valores adecuados
 //////////////////////////////
 //credenciales de redmine comun
-$userRedmine = "";
-$passRedmine = "";
-$apiRedmine = "";
-$urlRedmine = "";
+$userRedmineComun = "";
+$passRedmineComun = "";
+$apiRedmineComun = "";
+$urlRedmineComun = "";
 //$projectId = ""; hay varios proyectos
 
 //ids de los usuarios redmine común
