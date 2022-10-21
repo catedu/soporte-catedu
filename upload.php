@@ -27,7 +27,7 @@
         if (isset($fileName)) {
             // Compruebo extensión del fichero subida es válido
             if (! in_array($fileExtension,$fileExtensions)) {
-                $errors[] = "Las extensiones JPEG, JPG, PNG and GIF son las únicas permitidas";
+                $errors[] = "Las extensiones JPEG, JPG, PNG y GIF son las únicas permitidas";
             }
             // 
             if (empty($errors)) {
