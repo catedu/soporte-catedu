@@ -99,6 +99,7 @@
     // Recojo parámetros del form
     //////////////////////////////
     $ambito = htmlspecialchars($_POST["ambito"]);
+    $asunto = htmlspecialchars($_POST["asunto"]);
     $nombre_solicitante = htmlspecialchars($_POST["nombre_solicitante"]);
     $pape_solicitante = htmlspecialchars($_POST["pape_solicitante"]);
     $sape_solicitante = htmlspecialchars($_POST["sape_solicitante"]);
@@ -130,6 +131,7 @@
         $descriptionRedmine = '*' . $nombre_solicitante . ' ' . $pape_solicitante . '* ha enviado el ' . $date . ' desde la IP ' . $ip . ' una incidencia con la siguiente información:\n';
         $descriptionRedmine .= '\n';
         $descriptionRedmine .= '- *Ámbito* : ' .$ambito . '\n';
+        $descriptionRedmine .= '- *Asunto* : ' .$asunto . '\n';
         $descriptionRedmine .= '- *Nombre solicitante* : ' . $nombre_solicitante . '\n';
         $descriptionRedmine .= '- *1er apellido solicitante* : ' . $pape_solicitante . '\n';
         $descriptionRedmine .= '- *2º apellido solicitante* : ' . $sape_solicitante . '\n';
@@ -151,7 +153,7 @@
         <?xml version="1.0"?>
         <issue>
         <project_id>'.$projectId.'</project_id>
-        <subject>'.$ambito.'</subject>';
+        <subject>'.$asunto.' ('.$ambito.')</subject>';
 
         if($token != ""){
             $issue .= '
@@ -187,17 +189,17 @@
         $result = curl_exec($curl);
         curl_close($curl);
 
-        echo 'resultado: ' . $result . '<br/><br/>';
+        //echo 'resultado: ' . $result . '<br/><br/>';
         $respuesta = json_decode($result, true);
         $incidenciaCreada = $respuesta["issue"];
-        echo '$incidenciaCreada: '. $incidenciaCreada;
+        //echo '$incidenciaCreada: '. $incidenciaCreada;
         $incidenciaCreadaId = $incidenciaCreada["id"];
-        echo '$incidenciaCreadaId: '. $incidenciaCreadaId;
+        //echo '$incidenciaCreadaId: '. $incidenciaCreadaId;
 
         $exitoCreandoIncidencia = false;
         if (isset($incidenciaCreadaId) && $incidenciaCreadaId !== '') {
             $exitoCreandoIncidencia = true;
-            echo '$exitoCreandoIncidencia cambiado a true';
+            //echo '$exitoCreandoIncidencia cambiado a true';
         }
 
         //////////////////////////////
@@ -218,6 +220,7 @@
             $cuerpo .= 'su incidencia realizada el ' . $date . ' ha sido recogida en nuestro sistema con el id <strong>'. $incidenciaCreadaId .'</strong>. La misma contiene la siguiente información:<br/>';
             $cuerpo .= '<ul>';
             $cuerpo .= '<li><b>Ámbito</b>: ' . $ambito . '</li>';
+            $cuerpo .= '<li><b>Asunto</b>: ' . $asunto . '</li>';
             $cuerpo .= '<li><b>Nombre solicitante</b>: ' . $nombre_solicitante . '</li>';
             $cuerpo .= '<li><b>1er apellido solicitante</b>: ' . $pape_solicitante . '</li>';
             $cuerpo .= '<li><b>2º apellido solicitante</b>: ' . $sape_solicitante . '</li>';
@@ -226,7 +229,7 @@
             $cuerpo .= '</ul>';
             $cuerpo .= 'No conteste a este correo electrónico puesto que se trata de una cuenta desatendida y automatizada<br/>';
             $cuerpo .= 'Saludos<br/><br/>';
-            $cuerpo .= 'FP distancia Aragón';
+            $cuerpo .= 'CATEDU';
 
             $fromUser = new stdClass();
             $fromUser->firstname = null;
@@ -243,46 +246,25 @@
 <!DOCTYPE html>
     <html  dir="ltr" lang="es" xml:lang="es">
     <head>
-        <title>FP a distancia - Aragón</title>
-        <link rel="shortcut icon" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/pluginfile.php/1/theme_moove/favicon/1615997395/FAVICON11.ico" />
+    <title>Soporte - CATEDU</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="keywords" content="moodle, FP a distancia - Aragón" />
-        <link rel="stylesheet" type="text/css" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/theme/yui_combo.php?rollup/3.17.2/yui-moodlesimple-min.css" /><script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script><link rel="stylesheet" type="text/css" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/theme/styles.php/moove/1615997395_1/all" />
+        <meta name="keywords" content="soporte, tickets, CATEDU" />
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-        <link rel="stylesheet" href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/theme/moove/style/aragon/aragon-wrapper.css" type="text/css">
-        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">        
     </head>
-    <body  id="page-site-index" class="format-site course path-site chrome dir-ltr lang-es yui-skin-sam yui3-skin-sam test-adistanciafparagon-es pagelayout-frontpage course-1 context-2 notloggedin ">
-        <section  class="ita-sectionguia aragob_header_wrapper">
-            <!-- aragob bar  -->
-            <div class="aragob_header"></div>
-            <!-- fin aragon bar -->
-        </section>
-        <nav class="navbar nav-inicio">
-        </nav>
-        <div id="page" class="container-fluid">
-            <div id="page-header" class="frontpage-guest-header">
-                <div class="d-flex flex-wrap">
-                    <div id="page-navbar">
-                        <nav>
-                            <ol class="breadcrumb"><li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/" >Página Principal</a></li>
-                                <li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/soporte-catedu/" >Soporte</a></li>
-                            </ol>    
-                        </nav>
-                    </div>
-                </div>
-                <div id="page-content" class="row pb-3 d-print-block">
-                    <div id="region-main-box" class="col-12">
-                        <section id="region-main">
-                            <div class="card">
-                                <div class="card-body">
-                                    <!--span class="notifications" id="user-notifications"></span-->
-                                    <div role="main">
-                                        <span id="maincontent"></span>
-                                        <div class="settingsform">
+    <body >
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav>
+                        <ol class="breadcrumb"><li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/" >Página Principal</a></li>
+                            <li class="breadcrumb-item"><a href="https://<?php echo $_SERVER['HTTP_HOST'] ?>/soporte-catedu/" >Soporte</a></li>
+                        </ol>    
+                    </nav>
+                    <h2>Soporte</h2>
+                        
 <?php
     //////////////////////////////
     // comprobaciones para informar a los usuarios del éxito/fallo de su comunicación
@@ -300,40 +282,34 @@
         $h3 =  'Ha fallado la creación de la incidencia. Vuelva a intentarlo.';
     }
 ?>
-                                            <h2>Soporte</h2>
-                                            <h3><?php echo $h3 ?></h3>
-                                            <div class="settingsform">
+                    <h3><?php echo $h3 ?></h3>
+                    <div class="row">
 <?php
     if( $exitoCreandoIncidencia ){
 ?>
-                                            <p>La información recogida es la siguiente:</p>
-                                            <ul>
-                                                <li>Ámbito</b>: <?php echo htmlentities($ambito, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Nombre solicitante</b>: <?php echo htmlentities($nombre_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>1er apellido solicitante</b>: <?php echo htmlentities($pape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>2º apellido solicitante</b>: <?php echo htmlentities($sape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>E-mail solicitante</b>: <?php echo htmlentities($email_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
-                                                <li>Explicación de la situación</b>: <?php echo htmlentities($otros, ENT_QUOTES, "UTF-8"); ?></li>
-                                            </ul>
+                        <p>La información recogida es la siguiente:</p>
+                        <ul>
+                            <li>Ámbito</b>: <?php echo htmlentities($ambito, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>aSUNTO</b>: <?php echo htmlentities($ASUNTO, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>Nombre solicitante</b>: <?php echo htmlentities($nombre_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>1er apellido solicitante</b>: <?php echo htmlentities($pape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>2º apellido solicitante</b>: <?php echo htmlentities($sape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>E-mail solicitante</b>: <?php echo htmlentities($email_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>Explicación de la situación</b>: <?php echo htmlentities($otros, ENT_QUOTES, "UTF-8"); ?></li>
+                        </ul>
 <?php
     }else{
 ?>
-                                            <p class="box py-3 generalbox alert alert-error alert alert-danger">
-                                                Ha fallado la creación de la incidencia
-                                            </p>
+                        <div class="alert alert-warning" role="alert">
+                            Ha fallado la creación de la incidencia
+                        </div>
 <?php
     }
 ?>
-
-                                        </div>
-                                    </div>
-                                </div><!-- end of .card-body -->
-                            </div> <!-- card -->
-                        </section>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>      
         <script>
             
         </script>

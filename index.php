@@ -15,10 +15,9 @@ $sessionid = session_id();
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-
     </head>
     <body >
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-md-12">
 
@@ -46,6 +45,11 @@ $sessionid = session_id();
                                     <option value="WordPress">WordPress</option>
                                     <option value="otro">Otro ámbito o Desconozco el ámbito</option>
                                 </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="asunto" class="form-label">(*) Asunto</label>
+                                <input type="text" class="form-control" id="asunto" name="asunto" required >
                             </div>
 
                            <div class="mb-3">
