@@ -17,6 +17,7 @@
     $apiRedmine = "";
     $urlRedmine = "";
     $projectId = "";
+    $ownerEmailId = "1";
 
     //////////////////////////////
     // Funciones
@@ -48,7 +49,7 @@
      */
     function asignarIncidenciaA($ambito){
         // Le indico a la función que estas variables son las de fuera
-        global $userRedmine, $passRedmine, $apiRedmine, $urlRedmine, $projectId;
+        global $userRedmine, $passRedmine, $apiRedmine, $urlRedmine, $projectId, $ownerEmailId;
         // Asigno lo común
         $userRedmine = $GLOBALS["userRedmineComun"];
         $passRedmine = $GLOBALS["passRedmineComun"];
@@ -87,6 +88,7 @@
                 $apiRedmine = $GLOBALS["apiRedmineVx"];
                 $urlRedmine = $GLOBALS["urlRedmineVx"];
                 $projectId = "2";
+                $ownerEmailId = "4";
                 return $GLOBALS["idCategoryVitalinux"];
                 break;
             case "WordPress":
@@ -169,7 +171,7 @@
         $issue .= '<description><![CDATA['.$descriptionRedmine.']]></description>
         <priority_id>2</priority_id>
         <custom_fields type="array">
-            <custom_field id="1" name="owner-email">
+            <custom_field id="' . $ownerEmailId . '" name="owner-email">
                 <value>'.$email_solicitante.'</value>
             </custom_field>
         </custom_fields>
