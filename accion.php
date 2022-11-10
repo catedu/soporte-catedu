@@ -174,7 +174,7 @@
                 <value>'.$email_solicitante.'</value>
             </custom_field>
         </custom_fields>
-        <assigned_to_id>'. $asignarA .'</assigned_to_id>
+        <category_id>14</category_id>
         </issue>';
         
         curl_setopt($curl, CURLOPT_POSTFIELDS, $issue );
@@ -290,7 +290,7 @@
                         <p>La información recogida es la siguiente:</p>
                         <ul>
                             <li>Ámbito</b>: <?php echo htmlentities($ambito, ENT_QUOTES, "UTF-8"); ?></li>
-                            <li>aSUNTO</b>: <?php echo htmlentities($ASUNTO, ENT_QUOTES, "UTF-8"); ?></li>
+                            <li>Asunto</b>: <?php echo htmlentities($asunto, ENT_QUOTES, "UTF-8"); ?></li>
                             <li>Nombre solicitante</b>: <?php echo htmlentities($nombre_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
                             <li>1er apellido solicitante</b>: <?php echo htmlentities($pape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>
                             <li>2º apellido solicitante</b>: <?php echo htmlentities($sape_solicitante, ENT_QUOTES, "UTF-8"); ?></li>

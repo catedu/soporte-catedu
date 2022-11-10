@@ -7,6 +7,7 @@ $userRedmineComun = "";
 $passRedmineComun = "";
 $apiRedmineComun = "";
 $urlRedmineComun = "";
+$urlUploadsComun = "";
 //$projectId = ""; hay varios proyectos
 
 //ids de los usuarios redmine común
@@ -25,6 +26,7 @@ $userRedmineVx = "";
 $passRedmineVx = "";
 $apiRedmineVx = "";
 $urlRedmineVx = "";
+$urlUploadsVx = "";
 
 //ids de los usuarios redmine vitalinux
 $idUserVitalinux = "";

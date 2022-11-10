@@ -18,6 +18,7 @@
         $fileTmpName  = $_FILES['fileAjax']['tmp_name'];
         $fileType = $_FILES['fileAjax']['type'];
         $fileExtension = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
+        $ambito = htmlspecialchars($_POST["ambito"]);
 
         // Creo el fichero que enviaré al servidor de redmine
         $file = fopen($fileTmpName, 'r');
@@ -29,6 +30,15 @@
             if (! in_array($fileExtension,$fileExtensions)) {
                 $errors[] = "Las extensiones JPEG, JPG, PNG y GIF son las únicas permitidas";
             }
+
+            //Decido a dónde se envía la imagen en función del ámbito
+            $apiRedmine = $apiRedmineComun;
+            $urlUploads = $urlUploadsComun;
+            if( $ambito == "Vitalinux" ){
+                $apiRedmine = $apiRedmineVx;
+                $urlUploads = $urlUploadsVx;
+            }
+            $urlUploads = $urlUploads . $fileName;
             // 
             if (empty($errors)) {
                 // Hago lo relativo a redmine
@@ -47,7 +57,7 @@
                 );
                 curl_setopt($curl, CURLOPT_POST, 1);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $filedata );
-                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_URL, $urlUploads);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
                 
                 $result = curl_exec($curl)  ;
@@ -56,7 +66,7 @@
                 $token = $respuesta["upload"]["token"];
 
                 curl_close($curl);
-                
+                //Devuelvo el token
                 echo $token;
             } 
         }

@@ -31,8 +31,8 @@ $sessionid = session_id();
                             </div>
                             
                             <div class="mb-3">
-                            <label for="ambito" class="form-label">(*) Ámbito</label>
-                                <select id="ambito" name="ambito" class="form-select" required >
+                            <label for="ambito-select" class="form-label">(*) Ámbito</label>
+                                <select id="ambito-select" name="ambito-select" class="form-select" required >
                                     <option value="">Elija una opción</option>
                                     <option value="Aeducar">Aeducar</option>
                                     <option value="Aramoodle">Aramoodle</option>
@@ -45,6 +45,7 @@ $sessionid = session_id();
                                     <option value="WordPress">WordPress</option>
                                     <option value="otro">Otro ámbito o Desconozco el ámbito</option>
                                 </select>
+                                <input type="hidden" id="ambito" name="ambito" value="" />
                             </div>
 
                             <div class="mb-3">
@@ -74,23 +75,23 @@ $sessionid = session_id();
 
                             <div class="mb-3">
                                 <label for="adjunto" class="form-label">Adjunte una imagen si lo desea</label>
-                                <input type="file" class="form-control" id="adjunto" >
+                                <input type="file" class="form-control" id="adjunto" disabled >
                                 <input type="hidden" id="token" name="token" value="" />
                             </div>
 
                             <div class="mb-3">
-                                <label for="otros" class="form-label">Explique su incidencia</label>
+                                <label for="otros" class="form-label">(*) Explique su incidencia</label>
                                 <textarea required rows="8" cols="60" id="otros" name="otros" spellcheck="true" class="form-control text-ltr" required ></textarea>
                             </div>
 
                             <div class="mb-3">
-                                <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
+                                <img src="" alt="CAPTCHA" class="captcha-image">
                                 <p>¿No puedes leer la imagen? <a href='javascript: refreshCaptcha();'>click aquí</a> para refrescar</p>
                             </div>
 
                             <div class="mb-3">
                                 <label for="captcha_challenge" class="form-label">(*) Captcha</label>
-                                <input type="text" class="form-control" id="captcha_challenge" name="captcha_challenge" pattern="[A-Z]{6}" required >
+                                <input type="text" class="form-control" id="captcha_challenge" name="captcha_challenge" pattern="[A-Z]{6}" disabled required >
                             </div>
                             
                             <button type="submit" class="btn btn-primary">Enviar</button>
