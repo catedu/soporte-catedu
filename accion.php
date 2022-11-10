@@ -59,27 +59,27 @@
         switch ($ambito) {
             case "Aeducar":
                 $projectId = "10";
-                return $GLOBALS["idUserAeducar"];
+                return $GLOBALS["idCategoryAeducar"];
                 break;
             case "Aramoodle":
-                return $GLOBALS["idUserAramoodle"];
+                return $GLOBALS["idCategoryAramoodle"];
                 break;
             case "Aularagón":
-                return $GLOBALS["idUserAularagon"];
+                return $GLOBALS["idCategoryAularagon"];
                 break;
             case "Competencias digitales":
                 $projectId = "13";
-                return $GLOBALS["idUserCDD"];
+                return $GLOBALS["idCategoryCDD"];
                 break;
             case "Doceo":
-                return $GLOBALS["idUserDoceo"];
+                return $GLOBALS["idCategoryDoceo"];
                 break;
             case "FP Distancia":
                 $projectId = "12";
-                return $GLOBALS["idUserFP"];
+                return $GLOBALS["idCategoryFP"];
                 break;
             case "STEAM":
-                return $GLOBALS["idUserSTEAM"];
+                return $GLOBALS["idCategorySTEAM"];
                 break;
             case "Vitalinux":
                 $userRedmine = $GLOBALS["userRedmineVx"];
@@ -87,13 +87,13 @@
                 $apiRedmine = $GLOBALS["apiRedmineVx"];
                 $urlRedmine = $GLOBALS["urlRedmineVx"];
                 $projectId = "2";
-                return $GLOBALS["idUserVitalinux"];
+                return $GLOBALS["idCategoryVitalinux"];
                 break;
             case "WordPress":
-                return $GLOBALS["idUserWordPress"];
+                return $GLOBALS["idCategoryWordPress"];
                 break;
         }
-        return ["idUserOtros"];
+        return ["idCategoryOtros"];
     }
     //////////////////////////////
     // Recojo parámetros del form
@@ -143,9 +143,8 @@
         //////////////////////////////
         // Contacto con RedMine para crear la incidencia
         //////////////////////////////
-        $url = $GLOBALS["urlRedmineComun"];
-        
         $asignarA = asignarIncidenciaA($ambito);
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
         curl_setopt($curl, CURLOPT_POST, 1);
@@ -174,7 +173,7 @@
                 <value>'.$email_solicitante.'</value>
             </custom_field>
         </custom_fields>
-        <category_id>14</category_id>
+        <category_id>'.$asignarA.'</category_id>
         </issue>';
         
         curl_setopt($curl, CURLOPT_POSTFIELDS, $issue );
@@ -183,23 +182,19 @@
         
         curl_setopt($curl, CURLOPT_USERPWD, $userRedmine.":".$passRedmine);
 
-        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_URL, $urlRedmine);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 
         $result = curl_exec($curl);
         curl_close($curl);
 
-        //echo 'resultado: ' . $result . '<br/><br/>';
         $respuesta = json_decode($result, true);
         $incidenciaCreada = $respuesta["issue"];
-        //echo '$incidenciaCreada: '. $incidenciaCreada;
         $incidenciaCreadaId = $incidenciaCreada["id"];
-        //echo '$incidenciaCreadaId: '. $incidenciaCreadaId;
 
         $exitoCreandoIncidencia = false;
         if (isset($incidenciaCreadaId) && $incidenciaCreadaId !== '') {
             $exitoCreandoIncidencia = true;
-            //echo '$exitoCreandoIncidencia cambiado a true';
         }
 
         //////////////////////////////

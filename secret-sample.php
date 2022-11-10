@@ -11,15 +11,15 @@ $urlUploadsComun = "";
 //$projectId = ""; hay varios proyectos
 
 //ids de los usuarios redmine común
-$idUserDoceo = "";
-$idUserWordPress = "";
-$idUserAularagon = "";
-$idUserSTEAM = "";
-$idUserAramoodle = "";
-$idUserAeducar = "";
-$idUserFP = "";
-$idUserCDD = "";
-$idUserOtros = "";
+$idCategoryDoceo = "";
+$idCategoryWordPress = "";
+$idCategoryAularagon = "";
+$idCategorySTEAM = "";
+$idCategoryAramoodle = "";
+$idCategoryAeducar = "";
+$idCategoryFP = "";
+$idCategoryCDD = "";
+$idCategoryOtros = "";
 
 //credenciales de redmine vitalinux
 $userRedmineVx = "";
@@ -29,7 +29,7 @@ $urlRedmineVx = "";
 $urlUploadsVx = "";
 
 //ids de los usuarios redmine vitalinux
-$idUserVitalinux = "";
+$idCategoryVitalinux = "";
 
 
 
